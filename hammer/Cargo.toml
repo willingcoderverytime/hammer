@@ -1,0 +1,8 @@
+[package]
+name = "harmmer"
+version = "0.1.0"
+authors = ["willing"]
+edition = "2018"
+[dependencies]
+
+
