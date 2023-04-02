@@ -14,7 +14,7 @@
 /// 其分析思路为 没一步可达的位置都进行计算，对与规则不合的进行过滤。
 /// 即第一步可能到达的点位，  有哪些里面是否包含target，    第二步包含的全部可能。   
 /// 为什么不过滤，是为了找到全部的可能。
-/// 
+///
 /// 之前的思路完全陷入了定式的数学思维。
 ///
 ///
@@ -49,43 +49,41 @@ pub fn test_race_car() {
         assert_eq!(value, racecar(key));
     }
 }
-use std::collections::HashSet;
-impl Solution {
-    pub fn racecar(target: i32) -> i32 {
-        let mut visited: HashSet<Pos> = HashSet::new();
+use std::collections::{HashMap, HashSet};
+pub fn racecar(target: i32) -> i32 {
+    let mut visited: HashSet<Pos> = HashSet::new();
 
-        let mut cur_layer: Vec<Pos> = Vec::new();
+    let mut cur_layer: Vec<Pos> = Vec::new();
 
-        let start_pos = Pos { pos: 0, speed: 1 };
-        cur_layer.push(start_pos);
-        let mut ret = 0;
-        while !cur_layer.is_empty() {
-            let mut next_layer: Vec<Pos> = Vec::new();
-            for pos in cur_layer.iter() {
-                if visited.contains(pos) {
-                    continue;
-                }
-                visited.insert(pos.clone());
-                if pos.pos == target {
-                    return ret;
-                }
-                // receive A
-                let mut new_pos = Pos {
-                    pos: pos.pos + pos.speed,
-                    speed: pos.speed * 2,
-                };
-                next_layer.push(new_pos);
-                //receive R
-                new_pos = Pos {
-                    pos: pos.pos,
-                    speed: if pos.speed > 0 { -1 } else { 1 },
-                };
-                next_layer.push(new_pos);
+    let start_pos = Pos { pos: 0, speed: 1 };
+    cur_layer.push(start_pos);
+    let mut ret = 0;
+    while !cur_layer.is_empty() {
+        let mut next_layer: Vec<Pos> = Vec::new();
+        for pos in cur_layer.iter() {
+            if visited.contains(pos) {
+                continue;
             }
-            cur_layer = next_layer;
-            ret += 1;
+            visited.insert(pos.clone());
+            if pos.pos == target {
+                return ret;
+            }
+            // receive A
+            let mut new_pos = Pos {
+                pos: pos.pos + pos.speed,
+                speed: pos.speed * 2,
+            };
+            next_layer.push(new_pos);
+            //receive R
+            new_pos = Pos {
+                pos: pos.pos,
+                speed: if pos.speed > 0 { -1 } else { 1 },
+            };
+            next_layer.push(new_pos);
         }
-
-        return ret;
+        cur_layer = next_layer;
+        ret += 1;
     }
+
+    return ret;
 }
